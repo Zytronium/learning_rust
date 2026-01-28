@@ -25,6 +25,9 @@ fn main() {
         println!("=== OWNERSHIP ==="); // The most important part of Rust
         ownership();
         print_line();
+        println!("=== BORROWING ==="); // Also pretty important
+        borrowing();
+        print_line();
     } else {
         println!("Phase {phase} does not exist.");
     }
@@ -213,5 +216,23 @@ fn ownership() {
         println!("I have cloned a {cloned}");
         s
         // cloned gets dropped here
+    }
+}
+
+fn borrowing() {
+    let text: String = String::from("Never Gonna Give You Up!");
+    let length = calculate_length(&text);
+    println!("\"{text}\" is {length} bytes long.");
+    let mut text2: String = String::from("Hello World");
+    append_exclamation(&mut text2);
+    println!("{text2}");
+
+    fn calculate_length(s: &String) -> usize {
+        // borrows `s` by taking a reference to it
+        s.len() // returns the length of the string
+    }
+
+    fn append_exclamation(s: &mut String) {
+        s.push_str("!!!");
     }
 }
