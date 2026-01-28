@@ -23,7 +23,8 @@ fn main() {
         strings();
         print_line();
         println!("=== OWNERSHIP ==="); // The most important part of Rust
-
+        ownership();
+        print_line();
     } else {
         println!("Phase {phase} does not exist.");
     }
@@ -187,4 +188,30 @@ fn strings() {
     println!("{}", string_to_slice);
 
     println!("slice is type &str, owned is type String");
+}
+
+fn ownership() {
+    let mystery_item: String = String::from("five nuclear missiles");
+    take_ownership(mystery_item);
+    // println!("{}", mystery_item);
+    // This fails because nuclear bombs are not legal yet, so they were confiscated
+    // (by the take_ownership function, which took ownership of the missiles and then
+    // dropped them at the end of the function. Wait, THEY DROPPED THE NUCLEAR BOMBS!?
+    // THIS MEANS WAR!! CLONE WARS TIME!)
+
+    let trooper: String = String::from("Storm Trooper");
+    let trooper = borrow_and_clone(trooper);
+    println!("Successfully cloned {trooper}");
+    println!("The clone is already dead"); // It got dropped at the end of the function,
+                                           // just like me when I was a baby
+    fn take_ownership(s: String) {
+        println!("I now own {s}");
+    }
+
+    fn borrow_and_clone(s: String) -> String {
+        let cloned = s.clone();
+        println!("I have cloned a {cloned}");
+        s
+        // cloned gets dropped here
+    }
 }
