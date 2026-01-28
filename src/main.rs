@@ -46,6 +46,8 @@ fn main() {
         println!("=== Vectors ===");
         vectors();
         print_line();
+        println!("=== Structs ===");
+        structs();
     }
 }
 
@@ -278,6 +280,101 @@ fn vectors() {
 
     println!("{:?}", numbers);
 
-    numbers.pop();
+    let last = numbers.pop();
+    println!("{:?}", last); // .unwrap() to get rid of some()
     println!("{:?}", numbers);
+}
+
+struct Person {
+    name: String,
+    age: u32,
+    email: String,
+}
+
+impl Person {
+    fn new(name: String, age: u32, email: String) -> Person {
+        validate_name(&name);
+        validate_age(age);
+        validate_email(&email);
+
+        fn validate_name(name: &String) {
+            if name.len() <= 1 {
+                panic!("Name must be at least 2 bytes long");
+            }
+            if name.len() > 64 {
+                panic!("Name cannot be longer than 64 bytes");
+            }
+        }
+
+        fn validate_age(age: u32) {
+            if age > 150 {
+                panic!("Age cannot be older than 150 years")
+            }
+            // 0 is still a valid age and u32 can't be negative,
+            // so we won't set a minimum age
+        }
+
+        fn validate_email(email: &String) {
+            // I'm not gonna bother with complex email regex. We'll do something simple
+            if !email.contains('@') {
+                panic!("Email must contain an '@' character")
+            }
+            if !email.contains('.') {
+                panic!("Email must contain a '.' character")
+            }
+            if email.len() < 6 { // a@b.co is the shortest possible valid email
+                panic!("Email must be at least 6 bytes")
+            }
+            // I'm aware this is not perfect validation, as something like ".@abc!"
+            // would pass this
+        }
+
+        Person {
+            name,
+            age,
+            email
+        }
+
+    }
+
+    fn display(&self) {
+        println!("{} ({} years old) - {}", self.name, self.age, self.email)
+    }
+}
+
+fn structs() {
+    let john_doe: Person = Person::new(
+        String::from("John Doe"),
+        23,
+        String::from("johndoe@example.com")
+    );
+
+    john_doe.display();
+
+    println!();
+
+    let jane_doe: Person = Person::new(
+        String::from("Jane Doe"),
+        22,
+        String::from("janedoe@example.com"),
+    );
+    let jack_smith: Person = Person::new(
+        String::from("Jack Smith"),
+        28,
+        String::from("jack_smith123@example.com"),
+    );
+
+    let team: Vec<Person> = vec![john_doe, jane_doe, jack_smith];
+
+    for member in team {
+        member.display();
+    }
+
+    // attempt to create an invalid person
+/*    let invalid: Person = Person::new(
+      String::from(""),
+      2048,
+      String::from("&@dotcom"),
+    );*/ // tested: all 3 values trigger a panic correctly
+
 }
