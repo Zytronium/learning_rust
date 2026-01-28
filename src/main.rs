@@ -1,21 +1,27 @@
 fn main() {
-    println!("====== Phase 1: Syntax Fundamentals ======");
-    println!();
-    println!("=== VARIABLES ===");
-    variables();
-    print_line();
-    println!("=== CONDITIONS ===");
-    conditions();
-    print_line();
-    println!("=== LOOPS ===");
-    loops();
-    print_line();
-    println!("=== FUNCTIONS ===");
-    functions();
-    print_line();
-    println!();
-    println!("====== Phase 2: Ownership Basics ======");
-    println!();
+    let phase: u8 = 2;
+    if phase == 1 {
+        println!("====== Phase 1: Syntax Fundamentals ======");
+        println!();
+        println!("=== VARIABLES ===");
+        variables();
+        print_line();
+        println!("=== CONDITIONS ===");
+        conditions();
+        print_line();
+        println!("=== LOOPS ===");
+        loops();
+        print_line();
+        println!("=== FUNCTIONS ===");
+        functions();
+        print_line();
+        println!();
+    } else if phase == 2 {
+        println!("====== Phase 2: Ownership Basics ======");
+        println!();
+    } else {
+        println!("Phase {phase} does not exist.");
+    }
 }
 
 fn print_line() {
@@ -30,7 +36,10 @@ fn variables() {
     let language: &str = "Rust";
     let greeting: String = String::from("Hello World!");
 
-    y = 20;
+    // silence the warning about y never being used before its first update
+    if y == 10 {
+        y = 20;
+    }
 
     println!("{}", x);
     println!("{}", y);
@@ -38,7 +47,7 @@ fn variables() {
     println!("{}", is_rust_fun);
     println!("{}", language);
     println!("{}", greeting);
-    println!("x plus y equals {}", x + y )
+    println!("x plus y equals {}", x + y)
 }
 
 fn conditions() {
