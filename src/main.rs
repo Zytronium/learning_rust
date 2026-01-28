@@ -19,6 +19,11 @@ fn main() {
     } else if phase == 2 {
         println!("====== Phase 2: Ownership Basics ======");
         println!();
+        println!("=== STRINGS ===");
+        strings();
+        print_line();
+        println!("=== OWNERSHIP ==="); // The most important part of Rust
+
     } else {
         println!("Phase {phase} does not exist.");
     }
@@ -159,4 +164,27 @@ fn functions() {
     fn print_greeting(name: &str) {
         println!("Hello, {name}!");
     }
+}
+
+// -------------------------------
+
+fn strings() {
+    let slice: &str = "Hello";
+    let mut owned: String = String::from("World");
+
+    println!("{}", slice);
+    println!("{}", owned);
+
+    // slice.push(' ');
+    owned.push('!');
+
+    println!("{}", owned);
+
+    let slice_to_string = slice.to_string();
+    let string_to_slice: &str = &owned[..];
+
+    println!("{}", slice_to_string);
+    println!("{}", string_to_slice);
+
+    println!("slice is type &str, owned is type String");
 }
