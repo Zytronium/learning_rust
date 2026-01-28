@@ -1,6 +1,6 @@
 fn main() {
     // phase to test/print (set to 0 for all)
-    let phase: u8 = 3;
+    let phase: u8 = 0;
 
     // check if `phase` is equal to given number or 0
     let phs = |p: u8| -> bool {
@@ -43,11 +43,14 @@ fn main() {
     if phs(3) {
         println!("====== Phase 3: Data Structures ======");
         println!();
-        println!("=== Vectors ===");
+        println!("=== VECTORS ===");
         vectors();
         print_line();
-        println!("=== Structs ===");
+        println!("=== STRUCTS ===");
         structs();
+        print_line();
+        println!("=== ENUMS ===");
+        enums();
     }
 }
 
@@ -293,6 +296,7 @@ struct Person {
 
 impl Person {
     fn new(name: String, age: u32, email: String) -> Person {
+        // Added validation because I remember how to do it and wanted to test my memory
         validate_name(&name);
         validate_age(age);
         validate_email(&email);
@@ -377,4 +381,44 @@ fn structs() {
       String::from("&@dotcom"),
     );*/ // tested: all 3 values trigger a panic correctly
 
+}
+
+enum Shape {
+    Circle(f64),             // radius
+    Rectangle(f64, f64),     // width, height
+    Triangle(f64, f64, f64), // three sides' lengths
+}
+
+fn calculate_area(shape: &Shape) -> f64 {
+    match shape {
+        Shape::Circle(r) => 3.14159 * r * r,
+        Shape::Rectangle(w, h) => w * h,
+        Shape::Triangle(a, b, c) => {
+            // Heron's formula
+            let s = (a + b + c) / 2.0;
+            (s * (s - a) * (s - b) * (s - c)).sqrt()
+        }
+    }
+}
+
+fn shape_name(shape: &Shape) -> String {
+    match shape {
+        Shape::Circle(a) => String::from("Circle"),
+        Shape::Rectangle(a, b) => String::from("Rectangle"),
+        Shape::Triangle(a, b, c) => String::from("Triangle"),
+    }
+}
+
+fn enums() {
+    let tri_size = 2.69354737417719669;
+    let circle = Shape::Circle(5.0);
+    let rect = Shape::Rectangle(4.0, 6.0);
+    let triangle = Shape::Triangle(tri_size, tri_size, tri_size);
+
+    let shapes = vec![circle, rect, triangle];
+
+    for shape in &shapes {
+        let area = calculate_area(shape);
+        println!("{} area: {}", shape_name(shape), area);
+    }
 }
