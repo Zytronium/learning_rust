@@ -1,6 +1,16 @@
 fn main() {
+    // phase to test/print (set to 0 for all)
     let phase: u8 = 3;
-    if phase == 1 {
+
+    // check if `phase` is equal to given number or 0
+    let phs = |p: u8| -> bool {
+        if phase == p || phase == 0 {
+            return true;
+        }
+        false
+    }; // I don't actually understand how this works, Rust Rover just converted my broken function into this for me so that I could access `phase`
+
+    if phs(1) {
         println!("====== Phase 1: Syntax Fundamentals ======");
         println!();
         println!("=== VARIABLES ===");
@@ -16,7 +26,8 @@ fn main() {
         functions();
         print_line();
         println!();
-    } else if phase == 2 {
+    }
+    if phs(2) {
         println!("====== Phase 2: Ownership Basics ======");
         println!();
         println!("=== STRINGS ===");
@@ -28,14 +39,13 @@ fn main() {
         println!("=== BORROWING ==="); // Also pretty important
         borrowing();
         print_line();
-    } else if phase == 3 {
+    }
+    if phs(3) {
         println!("====== Phase 3: Data Structures ======");
         println!();
         println!("=== Vectors ===");
         vectors();
         print_line();
-    } else {
-        println!("Phase {phase} does not exist.");
     }
 }
 
