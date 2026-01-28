@@ -1,5 +1,5 @@
 fn main() {
-    let phase: u8 = 2;
+    let phase: u8 = 3;
     if phase == 1 {
         println!("====== Phase 1: Syntax Fundamentals ======");
         println!();
@@ -27,6 +27,12 @@ fn main() {
         print_line();
         println!("=== BORROWING ==="); // Also pretty important
         borrowing();
+        print_line();
+    } else if phase == 3 {
+        println!("====== Phase 3: Data Structures ======");
+        println!();
+        println!("=== Vectors ===");
+        vectors();
         print_line();
     } else {
         println!("Phase {phase} does not exist.");
@@ -235,4 +241,33 @@ fn borrowing() {
     fn append_exclamation(s: &mut String) {
         s.push_str("!!!");
     }
+}
+
+// -------------------------------
+
+fn vectors() {
+    let mut numbers: Vec<i32> = Vec::new();
+    // push 10, 20, 30, 40, and 50 to the vector
+    for i in 1..=5 {
+        numbers.push(i * 10);
+    }
+
+    println!("{:?}", numbers);
+    println!("{}", numbers[2]);
+
+    numbers[1] = 25;
+    println!("{:?}", numbers);
+
+    for number in &numbers {
+        println!("{number}");
+    }
+
+    for number in numbers.iter_mut() {
+        *number *= 2;
+    }
+
+    println!("{:?}", numbers);
+
+    numbers.pop();
+    println!("{:?}", numbers);
 }
