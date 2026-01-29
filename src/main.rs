@@ -3,12 +3,7 @@ fn main() {
     let phase: u8 = 0;
 
     // check if `phase` is equal to given number or 0
-    let phs = |p: u8| -> bool {
-        if phase == p || phase == 0 {
-            return true;
-        }
-        false
-    }; // I don't actually understand how this works, Rust Rover just converted my broken function into this for me so that I could access `phase`
+    let phs = |p: u8| phase == p || phase == 0;
 
     if phs(1) {
         println!("====== Phase 1: Syntax Fundamentals ======");
@@ -403,9 +398,9 @@ fn calculate_area(shape: &Shape) -> f64 {
 
 fn shape_name(shape: &Shape) -> String {
     match shape {
-        Shape::Circle(a) => String::from("Circle"),
-        Shape::Rectangle(a, b) => String::from("Rectangle"),
-        Shape::Triangle(a, b, c) => String::from("Triangle"),
+        Shape::Circle(..) => String::from("Circle"),
+        Shape::Rectangle(..) => String::from("Rectangle"),
+        Shape::Triangle(..) => String::from("Triangle"),
     }
 }
 
