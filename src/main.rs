@@ -1,8 +1,9 @@
+use std::fs;
 use std::io;
 
 fn main() {
     // phase to test/print (set to 0 for all)
-    let phase: u8 = 5;
+    let phase: u8 = 6;
 
     // check if `phase` is equal to given number or 0
     let phs = |p: u8| phase == p || phase == 0;
@@ -63,11 +64,20 @@ fn main() {
         println!();
     }
     if phs(5) {
-        println!("====== Phase 5: Practical Projects ======");
+        println!("====== Phase 5/6: Practical Projects ======");
         println!();
         println!("=== TEMPERATURE CONVERTER ===");
         temperature();
         print_line();
+        println!();
+    }
+    if phs(6) {
+        println!("====== Phase 5/6: Practical Projects ======");
+        println!();
+        println!("=== TODO LIST ===");
+        todo_list();
+        print_line();
+        println!();
     }
 }
 
@@ -534,4 +544,76 @@ fn temperature() {
         (deg - 32.0) * 5.0 / 9.0
     }
 
+}
+
+struct Task {
+    description: String,
+    completed: bool,
+}
+
+fn todo_list() {
+    let mut tasks: Vec<Task> = Vec::new();
+    // todo: load tasks from file using load_tasks()
+
+    loop {
+        let mut input: String = String::new();
+        println!("1. Add | 2. List | 3. Complete | 4. Quit");
+        io::stdin().read_line(&mut input).unwrap();
+        let input: i32 = input.trim().parse().unwrap();
+
+        match input {
+            1 => {
+                println!("Enter task:");
+                let mut task: String = String::new();
+                io::stdin().read_line(&mut task).unwrap();
+                let task: String = task.trim().to_string();
+
+                add_task(&mut tasks, task);
+                save_tasks(&tasks);
+            },
+            2 => list_tasks(&tasks),
+            3 => {
+                println!("Enter number:");
+                let mut index: String = String::new();
+                io::stdin().read_line(&mut index).unwrap();
+                let index: usize = index.trim().parse().unwrap();
+
+                complete_task(&mut tasks, index);
+                save_tasks(&tasks);
+            },
+            4 => break,
+            _ => println!("Invalid input."),
+        }
+    }
+
+    fn add_task(tasks: &mut Vec<Task>, description: String) {
+        let new_task: Task = Task {
+            description,
+            completed: false,
+        };
+
+        tasks.push(new_task);
+    }
+
+    fn list_tasks(tasks: &Vec<Task>) {
+        for (index, task) in tasks.iter().enumerate() {
+            println!("{index}. [{}] {}", if task.completed {"X"} else {" "}, task.description);
+        }
+    }
+
+    fn complete_task(tasks: &mut Vec<Task>, index: usize) {
+        if tasks.len() > index + 1 {
+            eprintln!("Task {index} does not exist");
+        } else {
+            tasks[index].completed = true;
+        }
+    }
+
+    fn save_tasks(tasks: &Vec<Task>) {
+        // ... implementation
+    }
+
+    fn load_tasks() -> Vec<Task> {
+        // ... implementation
+    }
 }
