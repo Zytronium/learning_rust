@@ -1,4 +1,4 @@
-use std::fs;
+﻿use std::fs;
 use std::io;
 
 fn main() {
@@ -552,14 +552,19 @@ struct Task {
 }
 
 fn todo_list() {
-    let mut tasks: Vec<Task> = Vec::new();
-    // todo: load tasks from file using load_tasks()
+    let mut tasks: Vec<Task> = load_tasks();
 
     loop {
         let mut input: String = String::new();
         println!("1. Add | 2. List | 3. Complete | 4. Quit");
         io::stdin().read_line(&mut input).unwrap();
-        let input: i32 = input.trim().parse().unwrap();
+        let input: i32 = match input.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Invalid input");
+                continue;
+            },
+        };
 
         match input {
             1 => {
@@ -582,7 +587,7 @@ fn todo_list() {
                 save_tasks(&tasks);
             },
             4 => break,
-            _ => println!("Invalid input."),
+            _ => println!("Invalid input"),
         }
     }
 
@@ -597,23 +602,57 @@ fn todo_list() {
 
     fn list_tasks(tasks: &Vec<Task>) {
         for (index, task) in tasks.iter().enumerate() {
-            println!("{index}. [{}] {}", if task.completed {"X"} else {" "}, task.description);
+            println!("{}. [{}] {}", index + 1, if task.completed {"X"} else {" "}, task.description);
         }
     }
 
     fn complete_task(tasks: &mut Vec<Task>, index: usize) {
-        if tasks.len() > index + 1 {
+        if tasks.len() < index || index <= 0 {
             eprintln!("Task {index} does not exist");
         } else {
-            tasks[index].completed = true;
+            tasks[index - 1].completed = true;
         }
     }
 
     fn save_tasks(tasks: &Vec<Task>) {
-        // ... implementation
+        let mut content = String::new();
+
+        for task in tasks {
+            let line = format!("{}|{}\n", task.completed, task.description);
+            content.push_str(&line);
+        }
+
+        fs::write("tasks.txt", content).expect("Failed to write file");
     }
 
     fn load_tasks() -> Vec<Task> {
-        // ... implementation
+        let mut tasks = Vec::new();
+
+        let content = match fs::read_to_string("tasks.txt") {
+            Ok(content) => content,
+            Err(_) => return tasks, // file doesn't exist
+        };
+
+        for line in content.lines() {
+            let parts: Vec<&str> = line.split('|').collect();
+
+            let completed = parts[0] == "true";
+            let mut description: String = String::new();
+            if parts.len() == 2 {
+                description = parts[1].to_string();
+            } else if parts.len() > 2 { // if description contains a "|" character
+                description = line.replacen(format!("{}|", parts[0]).as_str(), "", 1);
+                // technically we no longer need the first part "if len == 2" anymore and can just do the above as long as len >= 2
+            }
+
+            if parts.len() >= 2 {
+                tasks.push(Task {
+                    description,
+                    completed,
+                });
+            }
+        }
+
+        tasks
     }
 }
