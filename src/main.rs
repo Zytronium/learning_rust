@@ -1,6 +1,6 @@
 fn main() {
     // phase to test/print (set to 0 for all)
-    let phase: u8 = 0;
+    let phase: u8 = 4;
 
     // check if `phase` is equal to given number or 0
     let phs = |p: u8| phase == p || phase == 0;
@@ -34,6 +34,7 @@ fn main() {
         println!("=== BORROWING ==="); // Also pretty important
         borrowing();
         print_line();
+        println!();
     }
     if phs(3) {
         println!("====== Phase 3: Data Structures ======");
@@ -46,12 +47,18 @@ fn main() {
         print_line();
         println!("=== ENUMS ===");
         enums();
+        print_line();
+        println!();
     }
     if phs(4) {
         println!("====== Phase 4: Error Handling ======");
         println!();
         println!("=== OPTIONS ===");
         options();
+        print_line();
+        results();
+        print_line();
+        println!();
     }
 }
 
@@ -451,5 +458,39 @@ fn options() {
             }
         }
         None
+    }
+}
+
+fn results() {
+    let result0 = safe_divide(10.0, 2.0);
+    match result0.is_ok() {
+        true => println!("{}", result0.unwrap()),
+        _ => eprintln!("Error: {}", result0.unwrap_err()),
+    }
+
+    let result1 = calculate(5.0);
+    match result1.is_ok() {
+        true => println!("{}", result1.unwrap()),
+        _ => eprintln!("Error: {}", result1.unwrap_err()),
+    }
+
+    let result2 = calculate(0.0);
+    match result2.is_ok() {
+        true => println!("{}", result2.unwrap()),
+        _ => eprintln!("Error: {}", result2.unwrap_err()),
+    }
+
+    fn safe_divide(a: f64, b: f64) -> Result<f64, String> {
+        if b == 0.0 {
+            Err(String::from("Division by zero!"))
+        } else {
+            Ok(a/b)
+        }
+    }
+
+    fn calculate(x: f64) -> Result<f64, String> {
+        let result = safe_divide(100.0, x)?;
+
+        safe_divide(result, 2.0)
     }
 }
