@@ -1,6 +1,8 @@
+use std::io;
+
 fn main() {
     // phase to test/print (set to 0 for all)
-    let phase: u8 = 4;
+    let phase: u8 = 5;
 
     // check if `phase` is equal to given number or 0
     let phs = |p: u8| phase == p || phase == 0;
@@ -59,6 +61,13 @@ fn main() {
         results();
         print_line();
         println!();
+    }
+    if phs(5) {
+        println!("====== Phase 5: Practical Projects ======");
+        println!();
+        println!("=== TEMPERATURE CONVERTER ===");
+        temperature();
+        print_line();
     }
 }
 
@@ -493,4 +502,36 @@ fn results() {
 
         safe_divide(result, 2.0)
     }
+}
+
+// -------------------------------
+
+fn temperature() {
+    println!("Temperature Converter");
+    println!("Enter Temperature: ");
+
+    let mut temp = String::new();
+    io::stdin().read_line(&mut temp).unwrap();
+    let temp: f64 = temp.trim().parse().unwrap();
+
+    println!("Enter unit (C or F): ");
+
+    let mut unit = String::new();
+    io::stdin().read_line(&mut unit).unwrap();
+    let unit: String = unit.trim().to_uppercase();
+
+    match unit.as_str() {
+        "C" => println!("{temp}°C = {}°F", celsius_to_fahrenheit(temp)),
+        "F" => println!("{temp}°F = {}°C", fahrenheit_to_celsius(temp)),
+        _ => println!("Invalid unit"),
+    }
+
+    fn celsius_to_fahrenheit(deg: f64) -> f64 {
+        (deg * 9.0 / 5.0) + 32.0
+    }
+
+    fn fahrenheit_to_celsius(deg: f64) -> f64 {
+        (deg - 32.0) * 5.0 / 9.0
+    }
+
 }
