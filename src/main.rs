@@ -47,6 +47,12 @@ fn main() {
         println!("=== ENUMS ===");
         enums();
     }
+    if phs(4) {
+        println!("====== Phase 4: Error Handling ======");
+        println!();
+        println!("=== OPTIONS ===");
+        options();
+    }
 }
 
 fn print_line() {
@@ -415,5 +421,35 @@ fn enums() {
     for shape in &shapes {
         let area = calculate_area(shape);
         println!("{} area: {}", shape_name(shape), area);
+    }
+}
+
+// -------------------------------
+
+fn options() {
+    let numbs: Vec<i32> = vec![10, 20, 30, 40, 50];
+
+    // search for 30 using match
+    let result = find_number(&numbs, 30);
+    match result {
+        Some(i) => println!("Found at index {i}"),
+        None => println!("Not found"),
+    }
+
+    // search for 25 using if let Some() = ...
+    if let Some(i) = find_number(&numbs, 25) {
+        println!("Found at index {i}");
+    }
+
+    // Search for 100 using .unwrap_or(999)
+    println!("Index: {}", find_number(&numbs, 100).unwrap_or(999));
+
+    fn find_number(numbers: &Vec<i32>, target: i32) -> Option<usize> {
+        for (index, number) in numbers.iter().enumerate() {
+            if *number == target {
+                return Some(index);
+            }
+        }
+        None
     }
 }
