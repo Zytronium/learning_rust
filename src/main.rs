@@ -1,9 +1,10 @@
 ﻿use std::fs;
 use std::io;
+use std::collections::HashMap;
 
 fn main() {
     // phase to test/print (set to 0 for all)
-    let phase: u8 = 6;
+    let phase: u8 = 0;
 
     // check if `phase` is equal to given number or 0
     let phs = |p: u8| phase == p || phase == 0;
@@ -64,7 +65,7 @@ fn main() {
         println!();
     }
     if phs(5) {
-        println!("====== Phase 5/6: Practical Projects ======");
+        println!("====== Phase 5/6/7: Practical Projects ======");
         println!();
         println!("=== TEMPERATURE CONVERTER ===");
         temperature();
@@ -72,10 +73,18 @@ fn main() {
         println!();
     }
     if phs(6) {
-        println!("====== Phase 5/6: Practical Projects ======");
+        println!("====== Phase 5/6/7: Practical Projects ======");
         println!();
         println!("=== TODO LIST ===");
         todo_list();
+        print_line();
+        println!();
+    }
+    if phs(7) {
+        println!("====== Phase 5/6/7: Practical Projects ======");
+        println!();
+        println!("=== WORD COUNTER ===");
+        word_counter();
         print_line();
         println!();
     }
@@ -654,5 +663,43 @@ fn todo_list() {
         }
 
         tasks
+    }
+}
+
+fn word_counter() {
+    println!("Reading input.txt...");
+    let contents = fs::read_to_string("input.txt").unwrap(); // Read file
+    let mut word_count: HashMap<String, u32> = HashMap::new(); // Create hashmap
+
+    // Count words and populate the hashmap (format: `{word: count}`)
+    println!("Counting words...");
+    for word in contents.split_whitespace() {
+        let word = word.to_lowercase();
+        let word = word.trim_matches(|c: char| !c.is_alphanumeric());
+
+        let counter = word_count.entry(word.to_string()).or_insert(0);
+        *counter += 1;
+    }
+
+    // Reformat by converting the hashmap into a vector of tuples so we can sort
+    println!("Reformatting results...");
+    let mut words: Vec<(&String, &u32)> = Vec::new();
+
+    for (word, count) in word_count.iter() {
+        words.push((word, count));
+    }
+
+    // Sort results by word count, descending
+    println!("Sorting results...");
+    words.sort_by(|a, b| b.1.cmp(&a.1));
+
+    // List the top 10 words
+    println!("---- TOP 10 WORDS ----");
+    for (index, (word, count)) in words.iter().enumerate() {
+        println!("{}. {}: {}", index + 1, word, count);
+
+        if index >= 9 {
+            break;
+        }
     }
 }
